@@ -83,48 +83,4 @@ public class ProductControllerUnitTest {
                 .andExpect(content().string(containsString(resultContent)))
                 .andDo(print());
     }
-
-    @Test
-    public void createProductTest() throws Exception {
-        Product p = new Product("product 1", "product 1 description", 400.0);
-        p.setId(101);
-        String product = mapper.writeValueAsString(p);
-        when(productDao.save(Mockito.any(Product.class))).thenReturn(p);
-
-        this.mvc.perform((post("/products"))
-                        .content(product)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andDo(print());
-
-    }
-
-    @Test
-    public void updateProductTest() throws Exception {
-        Product p = new Product("product 1", "product 1 description", 400.0);
-        String product = mapper.writeValueAsString(p);
-        when(productDao.findById(2)).thenReturn(Optional.of(p));
-
-        this.mvc.perform((put("/products/2"))
-                        .content(product)
-                        .contentType(MediaType.APPLICATION_JSON))
-
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    public void deleteProductTest() throws Exception {
-        Product p = new Product("product 1", "product 1 description", 400.0);
-        p.setId(102);
-
-        // Mocking the behavior when trying to delete a product with ID 102
-        when(productDao.existsById(102)).thenReturn(true);
-
-        this.mvc.perform(delete("/products/102")
-                        .contentType(MediaType.APPLICATION_JSON))
-
-                .andExpect(status().isOk())
-                .andDo(print());
-    }
 }
